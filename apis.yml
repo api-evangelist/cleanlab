@@ -1,0 +1,132 @@
+aid: cleanlab
+url: https://raw.githubusercontent.com/api-evangelist/cleanlab/refs/heads/main/apis.yml
+name: Cleanlab
+kind: company
+description: Cleanlab is a data-and-AI trust platform. Its Trustworthy Language Model
+  (TLM) wraps any LLM with a real-time trustworthiness score to catch hallucinations,
+  Cleanlab Studio curates and labels training data and deploys reliable ML models,
+  and Codex adds a safety, guardrail, and remediation layer for AI assistants and
+  RAG. The open-source cleanlab library underpins it all with data-centric AI.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- AI
+- LLM
+- Trustworthiness
+- Data Quality
+- Guardrails
+created: '2026-06-21'
+modified: '2026-06-21'
+specificationVersion: '0.19'
+apis:
+- aid: cleanlab:trustworthy-language-model
+  name: Trustworthy Language Model (TLM)
+  tags:
+  - TLM
+  - Trustworthiness
+  - Hallucination Detection
+  - LLM
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://help.cleanlab.ai/tlm/
+  baseURL: https://api.cleanlab.ai/api/v1/openai_trustworthy_llm
+  properties:
+  - url: https://help.cleanlab.ai/tlm/
+    type: Documentation
+  - url: https://help.cleanlab.ai/tlm/api/python/tlm/
+    type: APIReference
+  - url: openapi/cleanlab-openapi.yml
+    type: OpenAPI
+  - url: asyncapi/cleanlab-asyncapi.yml
+    type: AsyncAPI
+  - url: collections/cleanlab.postman_collection.json
+    type: Postman
+  - url: https://github.com/cleanlab/cleanlab-tlm
+    type: GitHub
+  description: Wraps any base LLM (GPT, Claude, Gemini, Llama, and more) with a real-time
+    0-1 trustworthiness score to detect hallucinations and unreliable answers. Exposed
+    via an OpenAI-compatible Chat Completions endpoint (trustworthiness returned in
+    tlm_metadata) and via prompt / get_trustworthiness_score operations.
+- aid: cleanlab:cleanlab-studio
+  name: Cleanlab Studio
+  tags:
+  - Data Curation
+  - Labeling
+  - AutoML
+  - Inference
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://help.cleanlab.ai/studio/
+  baseURL: https://api.cleanlab.ai
+  properties:
+  - url: https://help.cleanlab.ai/studio/quickstart/api/
+    type: Documentation
+  - url: https://help.cleanlab.ai/studio/api/python/studio/
+    type: APIReference
+  - url: openapi/cleanlab-openapi.yml
+    type: OpenAPI
+  - url: collections/cleanlab.postman_collection.json
+    type: Postman
+  - url: https://github.com/cleanlab/cleanlab-studio
+    type: GitHub
+  description: Cloud platform for data-centric AI - upload datasets, run automated
+    data curation and error detection, train AutoML models, and deploy them for real-time
+    REST inference. Driven by the cleanlab-studio Python client and a REST inference
+    API.
+- aid: cleanlab:codex
+  name: Codex
+  tags:
+  - Guardrails
+  - Validation
+  - Remediation
+  - RAG
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://help.cleanlab.ai/codex/
+  baseURL: https://api.cleanlab.ai
+  properties:
+  - url: https://help.cleanlab.ai/codex/
+    type: Documentation
+  - url: https://help.cleanlab.ai/codex/api/python/project/
+    type: APIReference
+  - url: openapi/cleanlab-openapi.yml
+    type: OpenAPI
+  - url: collections/cleanlab.postman_collection.json
+    type: Postman
+  - url: https://github.com/cleanlab/cleanlab-codex
+    type: GitHub
+  description: Safety and reliability layer for AI assistants and RAG. Validates every
+    AI response, decides whether to guardrail it, scores it across multiple eval
+    criteria, escalates to subject-matter experts, and returns expert answers to
+    remediate bad responses. Integrated via project access keys.
+- aid: cleanlab:open-source-library
+  name: Open-Source Library
+  tags:
+  - Open Source
+  - Confident Learning
+  - Data-Centric AI
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.cleanlab.ai/
+  baseURL: https://github.com/cleanlab/cleanlab
+  properties:
+  - url: https://docs.cleanlab.ai/
+    type: Documentation
+  - url: https://github.com/cleanlab/cleanlab
+    type: GitHub
+  description: The original open-source cleanlab Python library for data-centric AI -
+    finds and fixes label errors, outliers, and other data issues using confident
+    learning. Runs locally (pip install cleanlab); free, not a hosted API.
+common:
+- type: GitHubOrganization
+  url: https://github.com/cleanlab
+- type: LinkedIn
+  url: https://www.linkedin.com/company/cleanlab
+- type: Website
+  url: https://cleanlab.ai
+- type: Documentation
+  url: https://help.cleanlab.ai
+- type: Plans
+  url: plans/cleanlab-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/cleanlab-rate-limits.yml
+- type: FinOps
+  url: finops/cleanlab-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

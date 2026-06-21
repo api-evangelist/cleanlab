@@ -1,0 +1,107 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Cleanlab
+providerId: cleanlab
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- AI
+- LLM
+- Trustworthiness
+- Data Quality
+- Guardrails
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Cleanlab spend. The open-source cleanlab library is free and
+  incurs no platform cost. Hosted spend comes from the Trustworthy Language
+  Model (metered by queries/tokens against the wrapped base LLM), Codex
+  validation (metered per validated response), and Cleanlab Studio (data
+  curation, AutoML training, and deployed-model inference). Public per-unit
+  rates are not consistently published, so cost meters here are unreconciled.
+notes: >-
+  Per-unit rates are not fully published; verify against Cleanlab pricing and
+  billing exports during reconciliation. Open-source cleanlab is free.
+sources:
+- https://cleanlab.ai/pricing/
+- https://help.cleanlab.ai/tlm/
+- https://help.cleanlab.ai/studio/
+- https://help.cleanlab.ai/codex/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Cleanlab
+serviceCategory: AI and Machine Learning
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Cleanlab AI Platform
+  ServiceCategory: AI and Machine Learning
+  ProviderName: Cleanlab
+  PublisherName: Cleanlab
+  InvoiceIssuerName: Cleanlab
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: tlm_queries
+  description: TLM prompt / trustworthiness-score requests, metered per query.
+  unit: queries
+  aggregation: sum
+  dimensions:
+  - account
+  - model
+  - quality_preset
+- name: tlm_tokens
+  description: Tokens processed by the wrapped base LLM behind TLM.
+  unit: tokens
+  aggregation: sum
+  dimensions:
+  - account
+  - model
+- name: codex_validations
+  description: Responses validated through a Codex project (guardrail + remediation).
+  unit: validations
+  aggregation: sum
+  dimensions:
+  - account
+  - project
+- name: studio_training
+  description: AutoML / data-curation compute used to train models in Cleanlab Studio.
+  unit: jobs
+  aggregation: sum
+  dimensions:
+  - account
+  - project
+- name: studio_inference
+  description: Predictions served from deployed Cleanlab Studio models via REST.
+  unit: predictions
+  aggregation: sum
+  dimensions:
+  - account
+  - model
+principles:
+- name: Visibility
+  description: Pull Cleanlab usage/billing exports; track TLM queries, Codex validations, and Studio compute per account and project.
+- name: Allocation
+  description: Tag API keys and project access keys per workload/team; map to internal cost centers.
+- name: Optimization
+  description: Use the free open-source cleanlab library where hosted scoring is unnecessary; pick lower-cost base models and quality presets for TLM; batch curation jobs in Studio.
+- name: Accountability
+  description: Assign owners per project/key; review TLM and platform spend monthly against budget.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

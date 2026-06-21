@@ -1,0 +1,144 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Cleanlab
+providerId: cleanlab
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- AI
+- LLM
+- Trustworthiness
+- Data Quality
+- Guardrails
+- Plans
+description: >-
+  Cleanlab spans an open-source library and three commercial cloud products.
+  The open-source cleanlab library is free (Apache-2.0) and runs locally. The
+  Trustworthy Language Model (TLM) offers a free tier to start, then usage-based
+  pricing; Cleanlab Studio and Codex (the Cleanlab AI Platform) offer free
+  trials/tiers with paid usage-based and Enterprise plans. Specific public
+  per-unit rates are not consistently published, so usage pricing here is not
+  reconciled.
+notes: >-
+  Open-source cleanlab is free. TLM, Studio, and Codex pricing is not fully
+  published; sign up at the respective consoles or contact Cleanlab sales for
+  current rates. Values below are unreconciled placeholders pending
+  reconciliation.
+sources:
+- https://cleanlab.ai/pricing/
+- https://help.cleanlab.ai/tlm/
+- https://help.cleanlab.ai/studio/
+- https://help.cleanlab.ai/codex/
+plans:
+- id: cleanlab-open-source
+  name: Open-Source Library
+  type: free
+  description: >-
+    The open-source cleanlab Python library (Apache-2.0). Find and fix label
+    errors, outliers, and data issues locally. Free; no API account required.
+  entries:
+  - label: cleanlab library
+    name: open_source
+    type: free
+    metric: usage
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free (Apache-2.0)
+    userMultiplied: false
+  elements:
+  - name: Confident Learning
+  - name: Label Error Detection
+  - name: Outlier Detection
+- id: cleanlab-tlm-free
+  name: TLM Free
+  type: free
+  description: >-
+    Free tier to start using the Trustworthy Language Model; get an API key at
+    tlm.cleanlab.ai.
+  entries:
+  - label: Free TLM Usage
+    name: tlm_free
+    type: free
+    metric: queries
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free tier (limits apply)
+    userMultiplied: false
+  elements:
+  - name: TLM prompt
+  - name: TLM trustworthiness score
+  - name: OpenAI-compatible Chat Completions
+- id: cleanlab-tlm-usage
+  name: TLM Usage
+  type: usage
+  description: >-
+    Usage-based pricing for the Trustworthy Language Model beyond the free tier;
+    public per-query / per-token rates not consistently published.
+  entries:
+  - label: TLM Queries
+    name: tlm_queries
+    type: usage
+    metric: queries
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: see Cleanlab pricing / contact sales
+    userMultiplied: false
+  elements:
+  - name: Trustworthiness Scoring
+  - name: Custom Eval Criteria
+- id: cleanlab-platform
+  name: Cleanlab AI Platform (Studio + Codex)
+  type: usage
+  description: >-
+    Cleanlab Studio (data curation, AutoML, deployed-model REST inference) and
+    Codex (validation, guardrails, remediation). Free trial/tier with paid
+    usage-based plans; public per-unit rates not published.
+  entries:
+  - label: Platform Usage
+    name: platform_usage
+    type: usage
+    metric: usage
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: see Cleanlab pricing / contact sales
+    userMultiplied: false
+  elements:
+  - name: Data Curation
+  - name: AutoML Training
+  - name: Deployed Model Inference
+  - name: Response Validation
+  - name: Remediation
+- id: cleanlab-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Volume commitments, VPC / private deployment, SSO, dedicated support, and
+    negotiated terms across TLM, Studio, and Codex. Contact Cleanlab sales.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Custom Volume Pricing
+  - name: Private / VPC Deployment
+  - name: Dedicated Support
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

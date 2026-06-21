@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cleanlab API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "TLM",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Trustworthy chat completion (OpenAI-compatible)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cleanlab.ai/api/v1/openai_trustworthy_llm/v1/chat/completions",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"model\": \"gpt-4.1-mini\",\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"What is the capital of France?\" }\n  ],\n  \"stream\": false\n}"
+            }
+          },
+          "docs": "OpenAI-compatible chat completion returning the completion plus a trustworthiness score in tlm_metadata. Set stream=true for an SSE stream."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Codex",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Validate an AI response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cleanlab.ai/api/v1/codex/projects/{project_id}/validate",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"query\": \"What is your refund policy?\",\n  \"context\": \"Retrieved context passed to the LLM.\",\n  \"response\": \"The AI-generated answer being validated.\"\n}"
+            }
+          },
+          "docs": "Validates a response and returns should_guardrail, eval_scores, escalated_to_sme, expert_answer, and log_id. Authenticate with the project access key."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Studio",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Predict with a deployed model",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cleanlab.ai/api/v1/deployment/{model_id}/predict",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"data\": [\n    \"first record to classify\",\n    \"second record to classify\"\n  ],\n  \"return_pred_proba\": true\n}"
+            }
+          },
+          "docs": "Runs inference against a deployed Cleanlab Studio model and returns predicted labels (and optional probabilities)."
+        }
+      ]
+    }
+  ]
+}

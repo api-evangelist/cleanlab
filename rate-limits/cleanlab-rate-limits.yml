@@ -1,0 +1,64 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Cleanlab
+providerId: cleanlab
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- AI
+- LLM
+- Trustworthiness
+- Data Quality
+- Guardrails
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Cleanlab applies per-account rate limits to its hosted APIs - the Trustworthy
+  Language Model (TLM), Codex validation, and Cleanlab Studio inference. TLM
+  enforces concurrency and request-rate limits that vary by tier (free vs.
+  paid). The Python clients retry transient errors and respect rate limiting.
+  Specific per-tier numeric limits are not consistently published and are not
+  reconciled in this artifact.
+notes: >-
+  Verify concurrency and request-rate limits in the relevant Cleanlab console
+  (tlm.cleanlab.ai, app.cleanlab.ai, codex.cleanlab.ai) during reconciliation;
+  limits change between free, paid, and enterprise tiers.
+sources:
+- https://help.cleanlab.ai/tlm/faq/
+- https://help.cleanlab.ai/tlm/
+- https://help.cleanlab.ai/studio/
+- https://help.cleanlab.ai/codex/
+responseCodes:
+  throttled: 429
+limits:
+- name: TLM Concurrent Requests
+  scope: account
+  metric: concurrent_requests
+  limit: see provider documentation
+  notes: Maximum in-flight TLM requests; varies by free vs. paid tier.
+- name: TLM Requests Per Minute
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Per-account TLM request rate; varies by tier.
+- name: Codex Validation Requests
+  scope: project
+  metric: requests
+  limit: see provider documentation
+  notes: Per-project validate request rate.
+- name: Studio Inference Requests
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Per-account deployed-model prediction request rate.
+policies:
+- name: Tiered Limits
+  description: Limits raise as accounts move from free to paid usage and via Enterprise agreements.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After; the official Python clients retry transient errors automatically.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

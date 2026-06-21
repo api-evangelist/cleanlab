@@ -1,0 +1,67 @@
+aid: cleanlab
+name: Cleanlab
+review:
+  question: Does Cleanlab expose a documented public WebSocket API?
+  answer: false
+  date: '2026-06-21'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: true
+  asyncapiScopeNote: |
+    Per API Evangelist scope, HTTP Server-Sent Events (SSE) is in-scope for
+    AsyncAPI modeling. The Trustworthy Language Model (TLM) is exposed via an
+    OpenAI-compatible Chat Completions endpoint, which supports streaming with
+    stream=true delivered as SSE. An AsyncAPI 2.6 document was created at
+    asyncapi/cleanlab-asyncapi.yml describing that TLM chat completion SSE
+    stream. No WebSocket surface was modeled because none is documented.
+findings:
+  summary: |
+    Cleanlab does not publish a documented public WebSocket API. Its hosted
+    products are REST (HTTPS) over https://api.cleanlab.ai. The Trustworthy
+    Language Model (TLM) is OpenAI-compatible: point the OpenAI client base_url
+    at https://api.cleanlab.ai/api/v1/openai_trustworthy_llm/ and call
+    /v1/chat/completions; the trustworthiness score is returned in
+    tlm_metadata. When stream=true is set, the completion is delivered as HTTP
+    Server-Sent Events (SSE), a one-way HTTP streaming transport - not
+    WebSocket. Codex validation and Cleanlab Studio inference are single-
+    response REST calls. The open-source cleanlab library is a local Python
+    package, not a hosted API. No realtime, bidirectional WebSocket (ws:// or
+    wss://) endpoint is documented for any Cleanlab product.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.cleanlab.ai
+      documented: true
+    - protocol: SSE
+      scheme: https
+      note: Server-Sent Events delivered over the TLM OpenAI-compatible chat completions endpoint when stream=true. Not WebSocket.
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented for TLM, Codex, or Cleanlab Studio as of the review date.
+  endpointsConfirmedRest:
+    - POST https://api.cleanlab.ai/api/v1/openai_trustworthy_llm/v1/chat/completions
+    - POST https://api.cleanlab.ai/api/v1/codex/projects/{project_id}/validate
+    - POST https://api.cleanlab.ai/api/v1/deployment/{model_id}/predict
+sources:
+  - url: https://help.cleanlab.ai/tlm/tutorials/tlm_chat_completion/
+    type: Documentation
+    note: Documents the OpenAI-compatible base_url https://api.cleanlab.ai/api/v1/openai_trustworthy_llm/ and tlm_metadata.trustworthiness_score; OpenAI Chat Completions supports stream=true SSE.
+  - url: https://help.cleanlab.ai/tlm/
+    type: Documentation
+    note: TLM overview; lists Chat Completions API and OpenAI Responses API integrations. All HTTPS REST.
+  - url: https://help.cleanlab.ai/codex/api/python/project/
+    type: APIReference
+    note: Project.validate over the Cleanlab AI Platform; single REST response, no WebSocket.
+  - url: https://help.cleanlab.ai/studio/tutorials/cleanlab-studio-api/inference_api/
+    type: Documentation
+    note: Deployed-model REST inference (predict); single HTTP response, no WebSocket.
+actions:
+  asyncapiPath: asyncapi/cleanlab-asyncapi.yml
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. Under the scope that allows SSE in
+    AsyncAPI, an AsyncAPI 2.6 document was authored for the TLM chat completion
+    SSE stream, with HTTP+SSE transport documented explicitly throughout the
+    spec (server protocol, channel bindings, info.x-transport-notes) so SSE is
+    never misrepresented as WebSocket.

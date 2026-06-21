@@ -1,0 +1,268 @@
+asyncapi: '2.6.0'
+id: 'urn:ai:cleanlab:tlm:openai:chat-completions:sse'
+info:
+  title: Cleanlab TLM Chat Completions Streaming (HTTP + SSE)
+  version: '1.0.0'
+  description: |
+    AsyncAPI 2.6 description of the Trustworthy Language Model (TLM)
+    **chat completion streaming** surface.
+
+    Cleanlab does not publish a WebSocket API. The TLM is exposed via an
+    OpenAI-compatible Chat Completions endpoint documented at
+    https://help.cleanlab.ai/tlm/tutorials/tlm_chat_completion/. Point the
+    OpenAI client `base_url` at
+    `https://api.cleanlab.ai/api/v1/openai_trustworthy_llm/` and the client
+    issues `POST /v1/chat/completions`. When the request body sets
+    `stream: true`, the completion is delivered as **HTTP Server-Sent Events
+    (SSE)** over that same REST endpoint. SSE is a one-way, server-to-client
+    HTTP streaming channel; it is **not** WebSocket.
+
+    Each streamed chunk is a JSON `chat.completion.chunk` object, identical to
+    the OpenAI streaming schema, terminated by a `data: [DONE]` sentinel. The
+    Cleanlab trustworthiness score is carried in `tlm_metadata` (returned on
+    the final chunk for streamed responses). The non-streamed request body and
+    response are modeled in the companion OpenAPI document at
+    `openapi/cleanlab-openapi.yml`.
+
+    Codex validation (`/codex/projects/{project_id}/validate`) and Cleanlab
+    Studio inference (`/deployment/{model_id}/predict`) return single HTTP
+    responses and are **not** streamed via SSE; they are not modeled here.
+  contact:
+    name: API Evangelist
+    email: kin@apievangelist.com
+    url: https://apievangelist.com
+  license:
+    name: API documentation - Cleanlab Terms of Service
+    url: https://cleanlab.ai/legal/terms-of-service/
+  x-transport-notes:
+    transport: HTTP Server-Sent Events (SSE)
+    protocol: https
+    direction: server-to-client (one-way)
+    mediaType: text/event-stream
+    triggeredBy: 'POST https://api.cleanlab.ai/api/v1/openai_trustworthy_llm/v1/chat/completions with request body { "stream": true }'
+    terminator: 'data: [DONE]'
+    notWebSocket: true
+    source: https://help.cleanlab.ai/tlm/tutorials/tlm_chat_completion/
+defaultContentType: text/event-stream
+servers:
+  cleanlab-tlm:
+    url: api.cleanlab.ai/api/v1/openai_trustworthy_llm/v1
+    protocol: https
+    description: |
+      Cleanlab's OpenAI-compatible TLM REST base. Chat completion streaming is
+      delivered as HTTP Server-Sent Events over this base when `stream: true`
+      is set on the JSON request body. AsyncAPI 2.6 has no dedicated SSE
+      protocol identifier; `https` is used here and the SSE transport is
+      documented in `info.x-transport-notes` and on each channel.
+    security:
+      - bearerAuth: []
+channels:
+  /chat/completions:
+    description: |
+      TLM chat completion SSE stream. The client opens this channel by issuing
+      `POST /chat/completions` with `Content-Type: application/json` and a JSON
+      body containing `stream: true`. The server responds with
+      `Content-Type: text/event-stream` and emits a sequence of `data:` lines,
+      each carrying one JSON-serialized `chat.completion.chunk` object,
+      followed by a final `data: [DONE]` line. The trustworthiness score is
+      carried in `tlm_metadata` on the final content chunk.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: '0.3.0'
+      x-sse:
+        mediaType: text/event-stream
+        eventField: 'data'
+        terminator: '[DONE]'
+    subscribe:
+      operationId: streamTrustworthyChatCompletionChunks
+      summary: Subscribe to streamed TLM chat completion chunks (SSE).
+      description: |
+        After `POST /chat/completions` is issued with `stream: true`, the
+        server emits an ordered sequence of SSE `data:` events. Each `data:`
+        line either carries a JSON-serialized `ChatCompletionChunk` (the final
+        content chunk also carries `tlm_metadata`) or the literal sentinel
+        `[DONE]` marking end of stream.
+      bindings:
+        http:
+          type: response
+          bindingVersion: '0.3.0'
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ChatCompletionChunk'
+          - $ref: '#/components/messages/StreamDone'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: 'Cleanlab TLM API key'
+      description: |
+        Cleanlab TLM API key. Set the `Authorization: Bearer <CLEANLAB_TLM_API_KEY>`
+        header on the `POST /chat/completions` request that opens the SSE
+        stream. Get a key from https://tlm.cleanlab.ai/.
+  messages:
+    ChatCompletionChunk:
+      name: ChatCompletionChunk
+      title: Streamed TLM chat completion chunk
+      summary: |
+        A single SSE `data:` event carrying one JSON `chat.completion.chunk`
+        object. Many of these are emitted per request, in order.
+      contentType: application/json
+      description: |
+        Sent as `data: {json}\n\n` on the SSE stream. The JSON object's
+        `object` field is always the literal string `chat.completion.chunk`.
+        The final content chunk additionally carries `tlm_metadata` with the
+        Cleanlab trustworthiness score.
+      payload:
+        $ref: '#/components/schemas/ChatCompletionChunk'
+      examples:
+        - name: openingChunk
+          summary: First chunk - establishes role
+          payload:
+            id: chatcmpl-abc123
+            object: chat.completion.chunk
+            created: 1750464000
+            model: gpt-4.1-mini
+            choices:
+              - index: 0
+                delta:
+                  role: assistant
+                  content: ''
+                finish_reason: null
+        - name: contentChunk
+          summary: Token delta
+          payload:
+            id: chatcmpl-abc123
+            object: chat.completion.chunk
+            created: 1750464000
+            model: gpt-4.1-mini
+            choices:
+              - index: 0
+                delta:
+                  content: 'Hello'
+                finish_reason: null
+        - name: finalChunk
+          summary: Final chunk - finish_reason set, tlm_metadata attached
+          payload:
+            id: chatcmpl-abc123
+            object: chat.completion.chunk
+            created: 1750464000
+            model: gpt-4.1-mini
+            choices:
+              - index: 0
+                delta: {}
+                finish_reason: stop
+            tlm_metadata:
+              trustworthiness_score: 0.9873
+    StreamDone:
+      name: StreamDone
+      title: Stream terminator
+      summary: |
+        The literal SSE event `data: [DONE]` that marks end of stream. Not
+        JSON; the payload is the string `[DONE]`.
+      contentType: text/plain
+      description: |
+        Standard OpenAI-compatible end-of-stream sentinel. Clients must stop
+        reading the stream when this sentinel is observed.
+      payload:
+        $ref: '#/components/schemas/StreamDoneSentinel'
+      examples:
+        - name: done
+          summary: End-of-stream sentinel
+          payload: '[DONE]'
+  schemas:
+    StreamDoneSentinel:
+      type: string
+      enum:
+        - '[DONE]'
+      description: |
+        End-of-stream sentinel. The full SSE line is `data: [DONE]`. The
+        payload value modeled here is the string literal `[DONE]`.
+    ChatCompletionChunk:
+      type: object
+      description: |
+        A streamed chunk of a TLM chat completion response, matching the
+        OpenAI `chat.completion.chunk` schema, with an added Cleanlab
+        `tlm_metadata` object on the final content chunk.
+      required:
+        - choices
+        - created
+        - id
+        - model
+        - object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the chat completion. Each chunk shares the same ID.
+        choices:
+          type: array
+          description: A list of chat completion choices.
+          items:
+            $ref: '#/components/schemas/ChatCompletionChunkChoice'
+        created:
+          type: integer
+          description: Unix timestamp (seconds) when the completion was created.
+        model:
+          type: string
+          description: The base LLM wrapped by TLM (e.g. gpt-4.1-mini).
+        object:
+          type: string
+          enum:
+            - chat.completion.chunk
+          description: The object type, always `chat.completion.chunk`.
+        tlm_metadata:
+          $ref: '#/components/schemas/TLMMetadata'
+    ChatCompletionChunkChoice:
+      type: object
+      required:
+        - delta
+        - finish_reason
+        - index
+      properties:
+        index:
+          type: integer
+          description: Index of the choice in the list of choices.
+        delta:
+          $ref: '#/components/schemas/ChatCompletionStreamResponseDelta'
+        finish_reason:
+          type: string
+          nullable: true
+          enum:
+            - stop
+            - length
+            - tool_calls
+          description: |
+            Reason the model stopped generating tokens. Null on all chunks
+            except the final content chunk.
+    ChatCompletionStreamResponseDelta:
+      type: object
+      description: A chat completion delta generated by streamed model responses.
+      properties:
+        role:
+          type: string
+          enum:
+            - system
+            - user
+            - assistant
+            - tool
+          description: Role of the author of this message. Typically only on the first chunk.
+        content:
+          type: string
+          nullable: true
+          description: The contents of the chunk message (token slice).
+    TLMMetadata:
+      type: object
+      description: |
+        Cleanlab trustworthiness metadata attached to the final content chunk
+        of a streamed TLM completion.
+      properties:
+        trustworthiness_score:
+          type: number
+          format: float
+          description: Trustworthiness of the response on a 0-1 scale.
+        log:
+          type: object
+          description: Optional extra metadata, such as a trust-score explanation when requested.
+          additionalProperties: true

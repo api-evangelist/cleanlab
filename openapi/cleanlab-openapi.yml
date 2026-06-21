@@ -1,0 +1,328 @@
+openapi: 3.0.1
+info:
+  title: Cleanlab API
+  description: >-
+    Specification of the Cleanlab data-and-AI trust platform APIs. Covers the
+    Trustworthy Language Model (TLM) OpenAI-compatible Chat Completions endpoint,
+    the Codex / Cleanlab AI Platform project validation (guardrail and
+    remediation) endpoint, and the Cleanlab Studio deployed-model REST inference
+    endpoint. All endpoints are HTTPS REST and authenticate with a Cleanlab API
+    key (or project access key) supplied as a Bearer token.
+  termsOfService: https://cleanlab.ai/legal/terms-of-service/
+  contact:
+    name: Cleanlab Support
+    email: support@cleanlab.ai
+  version: '1.0'
+servers:
+  - url: https://api.cleanlab.ai
+    description: Cleanlab platform API
+paths:
+  /api/v1/openai_trustworthy_llm/v1/chat/completions:
+    post:
+      operationId: createTrustworthyChatCompletion
+      tags:
+        - TLM
+      summary: Trustworthy chat completion (OpenAI-compatible)
+      description: >-
+        OpenAI-compatible Chat Completions endpoint that returns a standard
+        completion plus a Cleanlab trustworthiness score. Point the OpenAI
+        client base_url at https://api.cleanlab.ai/api/v1/openai_trustworthy_llm/
+        and the client appends /v1/chat/completions automatically. The
+        trustworthiness score (0-1) is returned in tlm_metadata on the response.
+        Set stream=true to receive the completion as Server-Sent Events; the
+        final SSE chunk carries the tlm_metadata.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCompletionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCompletionResponse'
+            text/event-stream:
+              schema:
+                type: string
+                description: Server-Sent Events stream of chat completion chunks (stream=true).
+        '401':
+          description: Invalid or missing API key.
+        '422':
+          description: Invalid request parameters.
+        '429':
+          description: Rate limit exceeded.
+  /api/v1/codex/projects/{project_id}/validate:
+    post:
+      operationId: validateResponse
+      tags:
+        - Codex
+      summary: Validate an AI response (guardrail + remediation)
+      description: >-
+        Validates an AI application's response against a Codex project. Returns
+        whether the response should be guardrailed, eval scores across
+        configured criteria, whether it was escalated to a subject-matter
+        expert, and an expert answer to remediate the response when a
+        semantically similar verified answer exists in the project. Authenticate
+        with the project access key as a Bearer token.
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          description: The Cleanlab Codex project identifier.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateResponse'
+        '401':
+          description: Invalid or missing access key.
+        '404':
+          description: Project not found.
+        '422':
+          description: Invalid request parameters.
+  /api/v1/deployment/{model_id}/predict:
+    post:
+      operationId: predict
+      tags:
+        - Studio
+      summary: Predict with a deployed Cleanlab Studio model
+      description: >-
+        Runs real-time inference against a model trained and deployed in
+        Cleanlab Studio. Submit one or more text/tabular records and receive
+        predicted labels and (optionally) predicted class probabilities.
+        Authenticate with the Cleanlab Studio API key as a Bearer token.
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          description: The deployed Cleanlab Studio model identifier.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictResponse'
+        '401':
+          description: Invalid or missing API key.
+        '404':
+          description: Model not found.
+        '422':
+          description: Invalid request parameters.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Cleanlab API key (TLM / Studio) or Codex project access key, supplied as
+        a Bearer token in the Authorization header.
+  schemas:
+    ChatCompletionRequest:
+      type: object
+      required:
+        - model
+        - messages
+      properties:
+        model:
+          type: string
+          description: >-
+            Base LLM to wrap, e.g. gpt-4.1-mini, gpt-5.1, gpt-4.1, o3,
+            claude-opus-4-0, claude-sonnet-4-0, nova-pro, and most LLMs that
+            support the Chat Completions API.
+          example: gpt-4.1-mini
+        messages:
+          type: array
+          description: Conversation messages in OpenAI Chat Completions format.
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        temperature:
+          type: number
+          format: float
+          nullable: true
+        max_tokens:
+          type: integer
+          nullable: true
+        stream:
+          type: boolean
+          default: false
+          description: When true, the response is delivered as Server-Sent Events.
+        extra_body:
+          type: object
+          description: >-
+            Cleanlab-specific options, e.g. quality_preset and log. Use
+            "log": ["explanation"] to also return a natural-language explanation
+            of the trustworthiness score.
+          additionalProperties: true
+    ChatMessage:
+      type: object
+      required:
+        - role
+        - content
+      properties:
+        role:
+          type: string
+          enum:
+            - system
+            - user
+            - assistant
+            - tool
+        content:
+          type: string
+    ChatCompletionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+          example: chat.completion
+        created:
+          type: integer
+        model:
+          type: string
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatCompletionChoice'
+        usage:
+          $ref: '#/components/schemas/Usage'
+        tlm_metadata:
+          $ref: '#/components/schemas/TLMMetadata'
+    ChatCompletionChoice:
+      type: object
+      properties:
+        index:
+          type: integer
+        message:
+          $ref: '#/components/schemas/ChatMessage'
+        finish_reason:
+          type: string
+    TLMMetadata:
+      type: object
+      description: Cleanlab trustworthiness metadata attached to the completion.
+      properties:
+        trustworthiness_score:
+          type: number
+          format: float
+          description: Trustworthiness of the response on a 0-1 scale.
+          example: 0.9873
+        log:
+          type: object
+          description: Optional extra metadata such as a trust-score explanation.
+          additionalProperties: true
+    Usage:
+      type: object
+      properties:
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
+    ValidateRequest:
+      type: object
+      required:
+        - response
+      properties:
+        query:
+          type: string
+          description: The core user question.
+        context:
+          type: string
+          description: Retrieved context supplied to the LLM (for RAG).
+        response:
+          type: string
+          description: The AI-generated response being validated.
+        messages:
+          type: array
+          description: Full prompt / conversation history in Chat Completions format.
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        rewritten_query:
+          type: string
+          nullable: true
+        eval_scores:
+          type: object
+          description: Pre-computed eval scores to pass through instead of recomputing.
+          additionalProperties:
+            type: number
+        metadata:
+          type: object
+          additionalProperties: true
+    ValidateResponse:
+      type: object
+      properties:
+        should_guardrail:
+          type: boolean
+          description: Whether the response should be suppressed or replaced.
+        escalated_to_sme:
+          type: boolean
+          description: Whether the query was escalated to a subject-matter expert.
+        eval_scores:
+          type: object
+          description: Numeric scores across configured evaluation criteria.
+          additionalProperties:
+            type: object
+            additionalProperties: true
+        expert_answer:
+          type: string
+          nullable: true
+          description: A verified expert answer to remediate the response, if available.
+        log_id:
+          type: string
+          description: Identifier of the logged query record.
+    PredictRequest:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          description: Records to score (text strings or row objects).
+          items:
+            type: object
+            additionalProperties: true
+        return_pred_proba:
+          type: boolean
+          default: false
+          description: Whether to also return predicted class probabilities.
+    PredictResponse:
+      type: object
+      properties:
+        predictions:
+          type: array
+          description: Predicted label for each input record.
+          items:
+            type: string
+        pred_proba:
+          type: array
+          description: Per-class probabilities for each record (when requested).
+          items:
+            type: array
+            items:
+              type: number
+              format: float
+security:
+  - bearerAuth: []

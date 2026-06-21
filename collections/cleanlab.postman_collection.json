@@ -1,0 +1,209 @@
+{
+  "info": {
+    "name": "Cleanlab API",
+    "description": {
+      "content": "Cleanlab data-and-AI trust platform: Trustworthy Language Model (TLM), Codex validation, and Cleanlab Studio inference. Authenticate with a Cleanlab API key (or project access key) as a Bearer token.",
+      "type": "text/plain"
+    },
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{apiKey}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "TLM",
+      "description": {
+        "content": "Trustworthy Language Model - OpenAI-compatible Chat Completions with a trustworthiness score.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "name": "Trustworthy chat completion (OpenAI-compatible)",
+          "request": {
+            "name": "Trustworthy chat completion (OpenAI-compatible)",
+            "description": {
+              "content": "OpenAI-compatible chat completion that returns the completion plus a trustworthiness score in tlm_metadata. Set stream=true for an SSE stream.",
+              "type": "text/plain"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/openai_trustworthy_llm/v1/chat/completions",
+              "path": [
+                "api",
+                "v1",
+                "openai_trustworthy_llm",
+                "v1",
+                "chat",
+                "completions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"gpt-4.1-mini\",\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"What is the capital of France?\" }\n  ],\n  \"stream\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Codex",
+      "description": {
+        "content": "Codex validation - guardrail and remediate AI responses against a Cleanlab project.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "name": "Validate an AI response",
+          "request": {
+            "name": "Validate an AI response",
+            "description": {
+              "content": "Validates a response, returns should_guardrail, eval_scores, escalated_to_sme, expert_answer, and log_id. Authenticate with the project access key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/codex/projects/{{project_id}}/validate",
+              "path": [
+                "api",
+                "v1",
+                "codex",
+                "projects",
+                "{{project_id}}",
+                "validate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": "{{project_id}}"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"What is your refund policy?\",\n  \"context\": \"Retrieved context passed to the LLM.\",\n  \"response\": \"The AI-generated answer being validated.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Studio",
+      "description": {
+        "content": "Cleanlab Studio - real-time inference from a deployed model.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "name": "Predict with a deployed model",
+          "request": {
+            "name": "Predict with a deployed model",
+            "description": {
+              "content": "Runs inference against a deployed Cleanlab Studio model and returns predicted labels (and optional probabilities).",
+              "type": "text/plain"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/deployment/{{model_id}}/predict",
+              "path": [
+                "api",
+                "v1",
+                "deployment",
+                "{{model_id}}",
+                "predict"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "model_id",
+                  "value": "{{model_id}}"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": [\n    \"first record to classify\",\n    \"second record to classify\"\n  ],\n  \"return_pred_proba\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.cleanlab.ai"
+    },
+    {
+      "key": "apiKey",
+      "value": ""
+    },
+    {
+      "key": "project_id",
+      "value": ""
+    },
+    {
+      "key": "model_id",
+      "value": ""
+    }
+  ]
+}
