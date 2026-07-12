@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/cleanlab-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: Cleanlab API key (TLM / Studio) or Codex project access key, supplied as a Bearer
+    token in the Authorization header.
+  sources:
+  - openapi/cleanlab-openapi.yml

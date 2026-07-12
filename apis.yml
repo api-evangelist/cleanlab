@@ -113,6 +113,14 @@ apis:
     finds and fixes label errors, outliers, and other data issues using confident
     learning. Runs locally (pip install cleanlab); free, not a hosted API.
 common:
+- type: TrustCenter
+  url: security/cleanlab-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/cleanlab-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/cleanlab-domain-security.yml
+- type: Authentication
+  url: authentication/cleanlab-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/cleanlab
 - type: LinkedIn
@@ -127,6 +135,8 @@ common:
   url: rate-limits/cleanlab-rate-limits.yml
 - type: FinOps
   url: finops/cleanlab-finops.yml
+- url: https://cleanlab.ai/blog/
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
