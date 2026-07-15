@@ -113,6 +113,8 @@ apis:
     finds and fixes label errors, outliers, and other data issues using confident
     learning. Runs locally (pip install cleanlab); free, not a hosted API.
 common:
+- type: AgenticAccess
+  url: agentic-access/cleanlab-agentic-access.yml
 - type: TrustCenter
   url: security/cleanlab-trust-center.yml
 - type: VulnerabilityDisclosure
