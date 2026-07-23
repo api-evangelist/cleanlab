@@ -1,0 +1,88 @@
+openapi: 3.0.1
+info:
+  title: Cleanlab Codex Studio API
+  description: Specification of the Cleanlab data-and-AI trust platform APIs. Covers the Trustworthy Language Model (TLM) OpenAI-compatible Chat Completions endpoint, the Codex / Cleanlab AI Platform project validation (guardrail and remediation) endpoint, and the Cleanlab Studio deployed-model REST inference endpoint. All endpoints are HTTPS REST and authenticate with a Cleanlab API key (or project access key) supplied as a Bearer token.
+  termsOfService: https://cleanlab.ai/legal/terms-of-service/
+  contact:
+    name: Cleanlab Support
+    email: support@cleanlab.ai
+  version: '1.0'
+servers:
+- url: https://api.cleanlab.ai
+  description: Cleanlab platform API
+security:
+- bearerAuth: []
+tags:
+- name: Studio
+paths:
+  /api/v1/deployment/{model_id}/predict:
+    post:
+      operationId: predict
+      tags:
+      - Studio
+      summary: Predict with a deployed Cleanlab Studio model
+      description: Runs real-time inference against a model trained and deployed in Cleanlab Studio. Submit one or more text/tabular records and receive predicted labels and (optionally) predicted class probabilities. Authenticate with the Cleanlab Studio API key as a Bearer token.
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        description: The deployed Cleanlab Studio model identifier.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictResponse'
+        '401':
+          description: Invalid or missing API key.
+        '404':
+          description: Model not found.
+        '422':
+          description: Invalid request parameters.
+components:
+  schemas:
+    PredictResponse:
+      type: object
+      properties:
+        predictions:
+          type: array
+          description: Predicted label for each input record.
+          items:
+            type: string
+        pred_proba:
+          type: array
+          description: Per-class probabilities for each record (when requested).
+          items:
+            type: array
+            items:
+              type: number
+              format: float
+    PredictRequest:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: Records to score (text strings or row objects).
+          items:
+            type: object
+            additionalProperties: true
+        return_pred_proba:
+          type: boolean
+          default: false
+          description: Whether to also return predicted class probabilities.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Cleanlab API key (TLM / Studio) or Codex project access key, supplied as a Bearer token in the Authorization header.

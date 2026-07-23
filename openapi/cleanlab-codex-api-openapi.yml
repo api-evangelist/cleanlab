@@ -1,0 +1,124 @@
+openapi: 3.0.1
+info:
+  title: Cleanlab Codex API
+  description: Specification of the Cleanlab data-and-AI trust platform APIs. Covers the Trustworthy Language Model (TLM) OpenAI-compatible Chat Completions endpoint, the Codex / Cleanlab AI Platform project validation (guardrail and remediation) endpoint, and the Cleanlab Studio deployed-model REST inference endpoint. All endpoints are HTTPS REST and authenticate with a Cleanlab API key (or project access key) supplied as a Bearer token.
+  termsOfService: https://cleanlab.ai/legal/terms-of-service/
+  contact:
+    name: Cleanlab Support
+    email: support@cleanlab.ai
+  version: '1.0'
+servers:
+- url: https://api.cleanlab.ai
+  description: Cleanlab platform API
+security:
+- bearerAuth: []
+tags:
+- name: Codex
+paths:
+  /api/v1/codex/projects/{project_id}/validate:
+    post:
+      operationId: validateResponse
+      tags:
+      - Codex
+      summary: Validate an AI response (guardrail + remediation)
+      description: Validates an AI application's response against a Codex project. Returns whether the response should be guardrailed, eval scores across configured criteria, whether it was escalated to a subject-matter expert, and an expert answer to remediate the response when a semantically similar verified answer exists in the project. Authenticate with the project access key as a Bearer token.
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Cleanlab Codex project identifier.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateResponse'
+        '401':
+          description: Invalid or missing access key.
+        '404':
+          description: Project not found.
+        '422':
+          description: Invalid request parameters.
+components:
+  schemas:
+    ChatMessage:
+      type: object
+      required:
+      - role
+      - content
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
+    ValidateResponse:
+      type: object
+      properties:
+        should_guardrail:
+          type: boolean
+          description: Whether the response should be suppressed or replaced.
+        escalated_to_sme:
+          type: boolean
+          description: Whether the query was escalated to a subject-matter expert.
+        eval_scores:
+          type: object
+          description: Numeric scores across configured evaluation criteria.
+          additionalProperties:
+            type: object
+            additionalProperties: true
+        expert_answer:
+          type: string
+          nullable: true
+          description: A verified expert answer to remediate the response, if available.
+        log_id:
+          type: string
+          description: Identifier of the logged query record.
+    ValidateRequest:
+      type: object
+      required:
+      - response
+      properties:
+        query:
+          type: string
+          description: The core user question.
+        context:
+          type: string
+          description: Retrieved context supplied to the LLM (for RAG).
+        response:
+          type: string
+          description: The AI-generated response being validated.
+        messages:
+          type: array
+          description: Full prompt / conversation history in Chat Completions format.
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        rewritten_query:
+          type: string
+          nullable: true
+        eval_scores:
+          type: object
+          description: Pre-computed eval scores to pass through instead of recomputing.
+          additionalProperties:
+            type: number
+        metadata:
+          type: object
+          additionalProperties: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Cleanlab API key (TLM / Studio) or Codex project access key, supplied as a Bearer token in the Authorization header.
