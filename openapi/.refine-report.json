@@ -1,0 +1,18 @@
+{
+  "provider": "cleanlab",
+  "sources": [
+    "cleanlab-codex-api-openapi.yml",
+    "cleanlab-studio-api-openapi.yml",
+    "cleanlab-tlm-api-openapi.yml"
+  ],
+  "outputs": [
+    "cleanlab-codex-api-openapi.yml",
+    "cleanlab-studio-api-openapi.yml",
+    "cleanlab-tlm-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
