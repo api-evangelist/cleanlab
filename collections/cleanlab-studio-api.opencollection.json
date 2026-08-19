@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cleanlab Codex Studio API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Studio",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Predict with a deployed Cleanlab Studio model",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cleanlab.ai/api/v1/deployment/:model_id/predict",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path",
+                "description": "The deployed Cleanlab Studio model identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Runs real-time inference against a model trained and deployed in Cleanlab Studio. Submit one or more text/tabular records and receive predicted labels and (optionally) predicted class probabilities. Authenticate with the Cleanlab Studio API key as a Bearer token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

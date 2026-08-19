@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cleanlab Codex TLM API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "TLM",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Trustworthy chat completion (OpenAI-compatible)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cleanlab.ai/api/v1/openai_trustworthy_llm/v1/chat/completions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "OpenAI-compatible Chat Completions endpoint that returns a standard completion plus a Cleanlab trustworthiness score. Point the OpenAI client base_url at https://api.cleanlab.ai/api/v1/openai_trustworthy_llm/ and the client appends /v1/chat/completions automatically. The trustworthiness score (0-1) is returned in tlm_metadata on the response. Set stream=true to receive the completion as Server-Sent Events; the final SSE chunk carries the tlm_metadata."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

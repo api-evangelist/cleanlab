@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cleanlab Codex API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Codex",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Validate an AI response (guardrail + remediation)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cleanlab.ai/api/v1/codex/projects/:project_id/validate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cleanlab Codex project identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates an AI application's response against a Codex project. Returns whether the response should be guardrailed, eval scores across configured criteria, whether it was escalated to a subject-matter expert, and an expert answer to remediate the response when a semantically similar verified answer exists in the project. Authenticate with the project access key as a Bearer token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
