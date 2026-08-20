@@ -22,6 +22,12 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cleanlab.png
 tags:
+- Artificial Intelligence
+- LLM
+- Trustworthiness
+- Data Quality
+- Guardrails
+tags_raw:
 - AI
 - LLM
 - Trustworthiness
@@ -34,6 +40,10 @@ apis:
 - aid: cleanlab:open-source-library
   name: Open-Source Library
   tags:
+  - Open-Source
+  - Confident Learning
+  - Data-Centric AI
+  tags_raw:
   - Open Source
   - Confident Learning
   - Data-Centric AI
