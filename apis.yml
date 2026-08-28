@@ -7,6 +7,18 @@ description: Cleanlab is a data-and-AI trust platform. Its Trustworthy Language 
   Cleanlab Studio curates and labels training data and deploys reliable ML models,
   and Codex adds a safety, guardrail, and remediation layer for AI assistants and
   RAG. The open-source cleanlab library underpins it all with data-centric AI.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
