@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Cleanlab Codex Studio API
+  title: Cleanlab Studio API
   description: Specification of the Cleanlab data-and-AI trust platform APIs. Covers the Trustworthy Language Model (TLM) OpenAI-compatible Chat Completions endpoint, the Codex / Cleanlab AI Platform project validation (guardrail and remediation) endpoint, and the Cleanlab Studio deployed-model REST inference endpoint. All endpoints are HTTPS REST and authenticate with a Cleanlab API key (or project access key) supplied as a Bearer token.
   termsOfService: https://cleanlab.ai/legal/terms-of-service/
   contact:
@@ -50,6 +50,21 @@ paths:
           description: Invalid request parameters.
 components:
   schemas:
+    PredictRequest:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: Records to score (text strings or row objects).
+          items:
+            type: object
+            additionalProperties: true
+        return_pred_proba:
+          type: boolean
+          default: false
+          description: Whether to also return predicted class probabilities.
     PredictResponse:
       type: object
       properties:
@@ -66,21 +81,6 @@ components:
             items:
               type: number
               format: float
-    PredictRequest:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          description: Records to score (text strings or row objects).
-          items:
-            type: object
-            additionalProperties: true
-        return_pred_proba:
-          type: boolean
-          default: false
-          description: Whether to also return predicted class probabilities.
   securitySchemes:
     bearerAuth:
       type: http

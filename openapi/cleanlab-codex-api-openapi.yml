@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Cleanlab Codex API
   description: Specification of the Cleanlab data-and-AI trust platform APIs. Covers the Trustworthy Language Model (TLM) OpenAI-compatible Chat Completions endpoint, the Codex / Cleanlab AI Platform project validation (guardrail and remediation) endpoint, and the Cleanlab Studio deployed-model REST inference endpoint. All endpoints are HTTPS REST and authenticate with a Cleanlab API key (or project access key) supplied as a Bearer token.
@@ -81,8 +81,9 @@ components:
             type: object
             additionalProperties: true
         expert_answer:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: A verified expert answer to remediate the response, if available.
         log_id:
           type: string
@@ -107,8 +108,9 @@ components:
           items:
             $ref: '#/components/schemas/ChatMessage'
         rewritten_query:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         eval_scores:
           type: object
           description: Pre-computed eval scores to pass through instead of recomputing.

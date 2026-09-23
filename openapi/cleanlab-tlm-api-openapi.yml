@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Cleanlab Codex TLM API
+  title: Cleanlab TLM API
   description: Specification of the Cleanlab data-and-AI trust platform APIs. Covers the Trustworthy Language Model (TLM) OpenAI-compatible Chat Completions endpoint, the Codex / Cleanlab AI Platform project validation (guardrail and remediation) endpoint, and the Cleanlab Studio deployed-model REST inference endpoint. All endpoints are HTTPS REST and authenticate with a Cleanlab API key (or project access key) supplied as a Bearer token.
   termsOfService: https://cleanlab.ai/legal/terms-of-service/
   contact:
@@ -91,19 +91,6 @@ components:
           $ref: '#/components/schemas/ChatMessage'
         finish_reason:
           type: string
-    TLMMetadata:
-      type: object
-      description: Cleanlab trustworthiness metadata attached to the completion.
-      properties:
-        trustworthiness_score:
-          type: number
-          format: float
-          description: Trustworthiness of the response on a 0-1 scale.
-          example: 0.9873
-        log:
-          type: object
-          description: Optional extra metadata such as a trust-score explanation.
-          additionalProperties: true
     Usage:
       type: object
       properties:
@@ -129,12 +116,14 @@ components:
           items:
             $ref: '#/components/schemas/ChatMessage'
         temperature:
-          type: number
+          type:
+          - number
+          - 'null'
           format: float
-          nullable: true
         max_tokens:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         stream:
           type: boolean
           default: false
@@ -142,6 +131,19 @@ components:
         extra_body:
           type: object
           description: 'Cleanlab-specific options, e.g. quality_preset and log. Use "log": ["explanation"] to also return a natural-language explanation of the trustworthiness score.'
+          additionalProperties: true
+    TLMMetadata:
+      type: object
+      description: Cleanlab trustworthiness metadata attached to the completion.
+      properties:
+        trustworthiness_score:
+          type: number
+          format: float
+          description: Trustworthiness of the response on a 0-1 scale.
+          example: 0.9873
+        log:
+          type: object
+          description: Optional extra metadata such as a trust-score explanation.
           additionalProperties: true
   securitySchemes:
     bearerAuth:
