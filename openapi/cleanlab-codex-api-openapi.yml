@@ -50,44 +50,6 @@ paths:
           description: Invalid request parameters.
 components:
   schemas:
-    ChatMessage:
-      type: object
-      required:
-      - role
-      - content
-      properties:
-        role:
-          type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-        content:
-          type: string
-    ValidateResponse:
-      type: object
-      properties:
-        should_guardrail:
-          type: boolean
-          description: Whether the response should be suppressed or replaced.
-        escalated_to_sme:
-          type: boolean
-          description: Whether the query was escalated to a subject-matter expert.
-        eval_scores:
-          type: object
-          description: Numeric scores across configured evaluation criteria.
-          additionalProperties:
-            type: object
-            additionalProperties: true
-        expert_answer:
-          type:
-          - string
-          - 'null'
-          description: A verified expert answer to remediate the response, if available.
-        log_id:
-          type: string
-          description: Identifier of the logged query record.
     ValidateRequest:
       type: object
       required:
@@ -119,6 +81,44 @@ components:
         metadata:
           type: object
           additionalProperties: true
+    ValidateResponse:
+      type: object
+      properties:
+        should_guardrail:
+          type: boolean
+          description: Whether the response should be suppressed or replaced.
+        escalated_to_sme:
+          type: boolean
+          description: Whether the query was escalated to a subject-matter expert.
+        eval_scores:
+          type: object
+          description: Numeric scores across configured evaluation criteria.
+          additionalProperties:
+            type: object
+            additionalProperties: true
+        expert_answer:
+          type:
+          - string
+          - 'null'
+          description: A verified expert answer to remediate the response, if available.
+        log_id:
+          type: string
+          description: Identifier of the logged query record.
+    ChatMessage:
+      type: object
+      required:
+      - role
+      - content
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
