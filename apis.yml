@@ -181,6 +181,9 @@ apis:
   - type: GitHub
     url: https://github.com/cleanlab/cleanlab-codex
 common:
+- type: CapabilityMap
+  url: capabilities/cleanlab-capability-edges.yml
+  name: Cleanlab Business Capability Map
 - type: AgenticAccess
   url: agentic-access/cleanlab-agentic-access.yml
 - type: TrustCenter
