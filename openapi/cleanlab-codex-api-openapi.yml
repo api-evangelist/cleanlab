@@ -50,21 +50,6 @@ paths:
           description: Invalid request parameters.
 components:
   schemas:
-    ChatMessage:
-      type: object
-      required:
-      - role
-      - content
-      properties:
-        role:
-          type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-        content:
-          type: string
     ValidateResponse:
       type: object
       properties:
@@ -119,6 +104,21 @@ components:
         metadata:
           type: object
           additionalProperties: true
+    ChatMessage:
+      type: object
+      required:
+      - role
+      - content
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http

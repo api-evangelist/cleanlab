@@ -47,21 +47,6 @@ paths:
           description: Rate limit exceeded.
 components:
   schemas:
-    ChatMessage:
-      type: object
-      required:
-      - role
-      - content
-      properties:
-        role:
-          type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-        content:
-          type: string
     ChatCompletionChoice:
       type: object
       properties:
@@ -71,39 +56,6 @@ components:
           $ref: '#/components/schemas/ChatMessage'
         finish_reason:
           type: string
-    ChatCompletionResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        object:
-          type: string
-          example: chat.completion
-        created:
-          type: integer
-        model:
-          type: string
-        choices:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatCompletionChoice'
-        usage:
-          $ref: '#/components/schemas/Usage'
-        tlm_metadata:
-          $ref: '#/components/schemas/TLMMetadata'
-    TLMMetadata:
-      type: object
-      description: Cleanlab trustworthiness metadata attached to the completion.
-      properties:
-        trustworthiness_score:
-          type: number
-          format: float
-          description: Trustworthiness of the response on a 0-1 scale.
-          example: 0.9873
-        log:
-          type: object
-          description: Optional extra metadata such as a trust-score explanation.
-          additionalProperties: true
     ChatCompletionRequest:
       type: object
       required:
@@ -136,6 +88,26 @@ components:
           type: object
           description: 'Cleanlab-specific options, e.g. quality_preset and log. Use "log": ["explanation"] to also return a natural-language explanation of the trustworthiness score.'
           additionalProperties: true
+    ChatCompletionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+          example: chat.completion
+        created:
+          type: integer
+        model:
+          type: string
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatCompletionChoice'
+        usage:
+          $ref: '#/components/schemas/Usage'
+        tlm_metadata:
+          $ref: '#/components/schemas/TLMMetadata'
     Usage:
       type: object
       properties:
@@ -145,6 +117,34 @@ components:
           type: integer
         total_tokens:
           type: integer
+    TLMMetadata:
+      type: object
+      description: Cleanlab trustworthiness metadata attached to the completion.
+      properties:
+        trustworthiness_score:
+          type: number
+          format: float
+          description: Trustworthiness of the response on a 0-1 scale.
+          example: 0.9873
+        log:
+          type: object
+          description: Optional extra metadata such as a trust-score explanation.
+          additionalProperties: true
+    ChatMessage:
+      type: object
+      required:
+      - role
+      - content
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
