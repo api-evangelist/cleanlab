@@ -18,6 +18,35 @@ edges:
     detected: '2026-10-15'
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
+- partner_name: Hugging Face (hugging-face-hub)
+  partner: hugging-face
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: hugging-face-hub
+  evidence: https://huggingface.co/Cleanlab
+  mirror_of: hugging-face/integrations/hugging-face-integration-edges.yml
+  apps:
+  - Cleanlab/FinQA-hallucination-detection
+  - Cleanlab/stanford-politeness
+  - Cleanlab/fire-financial-ner-extraction
+  - Cleanlab/amazon-reviews
+  - Cleanlab/insurance-claims-extraction
+  - Cleanlab/cifar-10-subset
+  - Cleanlab/legal-ediscovery
+  - Cleanlab/banking-intent-classification
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Hugging Face Hub datasets
+  badges:
+  - Verified publisher (Hugging Face verified organisation)
 generated: '2026-10-13'
 method: searched
-checked: []
+checked:
+- hugging-face/integrations/hugging-face-integration-edges.yml
+source:
+- hugging-face/integrations/hugging-face-integration-edges.yml
