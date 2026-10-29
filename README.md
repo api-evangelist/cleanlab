@@ -1,4 +1,4 @@
-# Cleanlab (cleanlab)
+# Cleanlab
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,122 +66,141 @@
 
 Cleanlab is a data-and-AI trust platform. Its Trustworthy Language Model (TLM) wraps any LLM with a real-time trustworthiness score to catch hallucinations, Cleanlab Studio curates and labels training data and deploys reliable ML models, and Codex adds a safety, guardrail, and remediation layer for AI assistants and RAG. The open-source cleanlab library underpins it all with data-centric AI.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/cleanlab/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/cleanlab/refs/heads/main/apis.yml)
+**Areas:** Artificial Intelligence · LLM · Trustworthiness · Data Quality · Guardrails · Real-Time
 
-## Tags
+## Cleanlab on APIs.io
 
-- AI
-- LLM
-- Trustworthiness
-- Data Quality
-- Guardrails
+Everything profiled for Cleanlab is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cleanlab/](https://apis.io/providers/cleanlab/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (4)
 
-- **Created:** 2026-06-21
-- **Modified:** 2026-06-21
+- [Open-Source Library](https://apis.io/apis/cleanlab/open-source-library/) — The original open-source cleanlab Python library for data-centric AI - finds and fixes label errors, outliers, and other data issues using confident…
+- [Cleanlab Codex API](https://apis.io/apis/cleanlab/cleanlab-codex-api/) — The Codex API from Cleanlab — 1 operation(s) for codex.
+- [Cleanlab Studio API](https://apis.io/apis/cleanlab/cleanlab-studio-api/) — The Studio API from Cleanlab — 1 operation(s) for studio.
+- [Cleanlab TLM API](https://apis.io/apis/cleanlab/cleanlab-tlm-api/) — The TLM API from Cleanlab — 1 operation(s) for tlm.
 
-## APIs
+### Published properties
 
-### Trustworthy Language Model (TLM)
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Wraps any base LLM (GPT, Claude, Gemini, Llama, and more) with a real-time 0-1 trustworthiness score to detect hallucinations and unreliable answers. Exposed via an OpenAI-compatible Chat Completions endpoint (trustworthiness returned in tlm_metadata) and via prompt / get_trustworthiness_score operations.
+#### AsyncAPI (1)
 
-- **Human URL:** [https://help.cleanlab.ai/tlm/](https://help.cleanlab.ai/tlm/)
-- **Base URL:** `https://api.cleanlab.ai/api/v1/openai_trustworthy_llm`
+Event-driven and webhook contracts.
 
-#### Tags
+- [Cleanlab TLM Chat Completions Streaming (HTTP + SSE)](https://apis.io/asyncapis/cleanlab/cleanlab-asyncapi/)
 
-- TLM
-- Trustworthiness
-- Hallucination Detection
-- LLM
+#### Event channels (1)
 
-#### Properties
+Individual events and webhooks the provider emits.
 
-- [Documentation](https://help.cleanlab.ai/tlm/)
-- [API Reference](https://help.cleanlab.ai/tlm/api/python/tlm/)
-- [OpenAPI](openapi/cleanlab-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [AsyncAPI](asyncapi/cleanlab-asyncapi.yml) — [AsyncAPI Specification](https://www.asyncapi.com/docs/reference/specification/latest)
-- [Postman Collection](collections/cleanlab.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cleanlab.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [GitHub](https://github.com/cleanlab/cleanlab-tlm)
+- [/chat/completions](https://apis.io/channels/cleanlab/chat-completions/)
 
-### Cleanlab Studio
+#### Agentic access (1)
 
-Cloud platform for data-centric AI - upload datasets, run automated data curation and error detection, train AutoML models, and deploy them for real-time REST inference. Driven by the cleanlab-studio Python client and a REST inference API.
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- **Human URL:** [https://help.cleanlab.ai/studio/](https://help.cleanlab.ai/studio/)
-- **Base URL:** `https://api.cleanlab.ai`
+- [Cleanlab Agentic Access](https://apis.io/agentic-access/cleanlab/cleanlab-agentic-access/)
 
-#### Tags
+#### Collections (4)
 
-- Data Curation
-- Labeling
-- AutoML
-- Inference
+Postman and Open Collection request collections.
 
-#### Properties
+- [Cleanlab API](https://apis.io/collections/cleanlab/open-cleanlab/)
+- [Cleanlab Codex API](https://apis.io/collections/cleanlab/open-cleanlab-codex-api/)
+- [Cleanlab Codex Studio API](https://apis.io/collections/cleanlab/open-cleanlab-studio-api/)
+- [Cleanlab Codex TLM API](https://apis.io/collections/cleanlab/open-cleanlab-tlm-api/)
 
-- [Documentation](https://help.cleanlab.ai/studio/quickstart/api/)
-- [API Reference](https://help.cleanlab.ai/studio/api/python/studio/)
-- [OpenAPI](openapi/cleanlab-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cleanlab.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cleanlab.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [GitHub](https://github.com/cleanlab/cleanlab-studio)
+#### Governance rules (1)
 
-### Codex
+Spectral rulesets for the provider's contracts.
 
-Safety and reliability layer for AI assistants and RAG. Validates every AI response, decides whether to guardrail it, scores it across multiple eval criteria, escalates to subject-matter experts, and returns expert answers to remediate bad responses. Integrated via project access keys.
+- [Cleanlab — asyncapi rules](https://apis.io/rules/cleanlab/cleanlab-asyncapi-spectral-rules/)
 
-- **Human URL:** [https://help.cleanlab.ai/codex/](https://help.cleanlab.ai/codex/)
-- **Base URL:** `https://api.cleanlab.ai`
+#### Security (4)
 
-#### Tags
+Authentication, trust centre, and vulnerability disclosure.
 
-- Guardrails
-- Validation
-- Remediation
-- RAG
+- [Cleanlab Authentication](https://apis.io/security/cleanlab/cleanlab-authentication/)
+- [Cleanlab Domain Security](https://apis.io/security/cleanlab/cleanlab-domain-security/)
+- [Cleanlab Trust Center](https://apis.io/security/cleanlab/cleanlab-trust-center/)
+- [Cleanlab Vulnerability Disclosure](https://apis.io/security/cleanlab/cleanlab-vulnerability-disclosure/)
 
-#### Properties
+#### Plans and pricing (1)
 
-- [Documentation](https://help.cleanlab.ai/codex/)
-- [API Reference](https://help.cleanlab.ai/codex/api/python/project/)
-- [OpenAPI](openapi/cleanlab-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cleanlab.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cleanlab.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [GitHub](https://github.com/cleanlab/cleanlab-codex)
+Published plans, tiers and prices.
 
-### Open-Source Library
+- [Cleanlab Plans Pricing](https://apis.io/plans/cleanlab/cleanlab-plans-pricing/)
 
-The original open-source cleanlab Python library for data-centric AI - finds and fixes label errors, outliers, and other data issues using confident learning. Runs locally (pip install cleanlab); free, not a hosted API.
+#### Rate limits (1)
 
-- **Human URL:** [https://docs.cleanlab.ai/](https://docs.cleanlab.ai/)
-- **Base URL:** `https://github.com/cleanlab/cleanlab`
+Published request limits.
 
-#### Tags
+- [Cleanlab Rate Limits](https://apis.io/rate-limits/cleanlab/cleanlab-rate-limits/)
 
-- Open Source
-- Confident Learning
-- Data-Centric AI
+#### FinOps (1)
 
-#### Properties
+What the API costs to run, by operation.
 
-- [Documentation](https://docs.cleanlab.ai/)
-- [GitHub](https://github.com/cleanlab/cleanlab)
+- [Cleanlab Finops](https://apis.io/finops/cleanlab/cleanlab-finops/)
 
-## Common Properties
+## Where to find this API
 
-- [GitHub Organization](https://github.com/cleanlab)
-- [LinkedIn](https://www.linkedin.com/company/cleanlab)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://cleanlab.ai)
 - [Documentation](https://help.cleanlab.ai)
-- [Plans](plans/cleanlab-plans-pricing.yml)
-- [Rate Limits](rate-limits/cleanlab-rate-limits.yml)
-- [Fin Ops](finops/cleanlab-finops.yml)
+- [Blog](https://cleanlab.ai/blog/)
+- [GitHub](https://github.com/cleanlab)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 32.9** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 55.2 |
+| Contract governance | 11.4 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 32.1 |
+| Access clarity | 15.8 |
+
+**Agent readiness 19.0** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 20.9** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/cleanlab/](https://apis.io/providers/cleanlab/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Cleanlab: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/cleanlab/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
